@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>dang ky</title>
+</head>
+<body>
+    <h3>dang ky</h3>
+    <form>
+        <div class="">
+            <label for="username">username</label>
+            <input type="text" id="username" placeholder="vui long dang nhap">
+            <label class="error"></label>
+            
+        </div>
+        <div class="">
+            <label for="email"> email</label>
+            <input type="text" id="email" placeholder="vui long nhap email">
+            <label class="error"></label>
+        </div>
+     
+        <div class="">
+            <label >mat khau</label>
+            <input type="text" id="current-password" placeholder="vui long nhap password    ">
+            <label class="error"></label>
+        </div>
+        <button id=reg> dang ky </button>
+        <div>
+    </form>
+    <button id="chuyen"> chuyen </button>
+    
+        <a href="./login.html">dang nhap</a>
+        <a href="./resgiter.html">dang ky</a>
+        <logout href="./resgiter.html">logout</a>
+    </div>
+
+ 
+</body>
+</html>
+<script>
+    var password = document.querySelector("#current-password")
+    username = document.querySelector("#username")
+    email = document.querySelector("#email")
+    reg = document.querySelector("#reg")
+    var chuyen = document.querySelector("#chuyen")
+    errorList = document.querySelectorAll(".error")
+
+
+    chuyen.onclick = function(e){
+        console.log("hi")
+        e.preventDefault()
+            location.href= "http://stackoverflow.com";
+    }
+    reg.onclick = function(e){
+        e.preventDefault();
+        console.log("submit");
+        let registerApi = 'https://f8team.dev/api/auth/chat-register';
+        let options = {
+            method: "POST",
+            headers: {
+                'content-type': 'application/json',
+                'accept': 'application/json',
+            },
+            body: JSON.stringify({
+                name: `${username.value}`,
+                email: `${email.value}`,
+                password: `${password.value}`,
+            })
+        }          
+
+   
+
+        fetch(registerApi, options)
+            .then(res => {
+                console.log(res.status);
+
+                if(res.status >= 200 && res.status <300){
+                    console.log("thanh cong");
+                    return res.json();
+                }
+                if(res.status >= 400 && res.status <=500){
+                    console.log(errorList);
+                }
+            })
+            .then(result => {
+                //luu token
+                console.log(result);
+                localStorage.setItem('token', `${result.meta.token}`);
+                //chuyen trang home
+                console.log("dang ki thanh cong chuyen trang login");
+                location.replace("./login.html");
+            })     
+           
+    }
+
+</script>
