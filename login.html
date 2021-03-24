@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>dang nhap</title>
+    <style>
+        .error {
+            color:red;
+            font-size:12px;
+        }
+    </style>
+</head>
+<body>
+    <h3>dang nhap</h3>
+    <form action="POST">
+        <div class="">
+            <label for="email">email</label>
+            <input type="text" id="email" placeholder="vui long nhap email"/>
+            <label class="error"></label>
+        </div>
+     
+        <div class="">
+            <label for="password">pass</label>
+            <input type="password" id="password" placeholder="password" placeholder="vui long nhap mat khau">
+        </div>
+        <button id=log> dang nhap </button>
+        <button id=chuyen> chuyen trang thai </button>
+    </form>
+    <div>
+        <a href="./login.html">dang nhap</a>
+        <a href="./resgiter.html">dang ky</a>
+    </div>
+</body>
+</html>
+<script>
+
+
+    var loc = localStorage.getItem('token');
+    if(loc = null){
+        console.log("run");
+        location.replace("./login.html");
+    }
+     password = document.querySelector("#password")
+    username = document.querySelector("#username")
+    email = document.querySelector("#email")
+    reg = document.querySelector("#reg")
+    var chuyen = document.querySelector("#chuyen")
+    console.log(password.value);
+
+    chuyen.onclick = function(e){
+        console.log("hi")
+        e.preventDefault()
+            location.href= "http://stackoverflow.com";
+        }
+    function showError(){
+        
+    }
+    log.onclick = function(e){
+        e.preventDefault();
+        let registerApi = 'https://f8team.dev/api/auth/chat-login';
+        let options = {
+            method: "POST",
+            headers: {
+                'content-type': 'application/json',
+                'accept': 'application/json',
+            },
+            body: JSON.stringify({
+                email: `${email.value}`,
+                password: `${password.value}`,
+            })
+        }          
+        fetch(registerApi, options)
+            .then(res => {
+                if(res.status >= 200 && res.status <300){
+                    console.log("thanh cong");
+                    return res.json();
+                }
+                if(res.status >= 400 && res.status <=500){
+                    console.log(res.status);
+                }
+            })
+            .then(result => {
+                localStorage.setItem('token', `${result.meta.token}`);
+                //luu token
+                //chuyen trang home
+                location.replace("./home.html");
+            })
+            .catch(res => {
+            })      
+        }
+   
+
+    
+</script>

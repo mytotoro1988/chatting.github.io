@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h3>Day la trang chu</h3>
+    <a href="./login.html">dang nhap</a>
+    <a href="./resgiter.html">dang kynhap</a>
+    <h3>xin chao !</h3>
+    <h3 id="hello"></h3>
+    <button id="chuyen">Chuyen</button>
+    <button id="logout">log out</button>
+</body>
+</html>
+<script>
+
+
+var loc = localStorage.getItem('token');
+    password = document.querySelector("#password")
+    username = document.querySelector("#username")
+    email = document.querySelector("#email")
+    reg = document.querySelector("#reg")
+    var chuyen = document.querySelector("#chuyen")
+     hello = document.querySelector("#hello")
+     logout = document.querySelector("#logout")
+
+     chuyen.onclick = function(e){
+        console.log("hi")
+        e.preventDefault()
+            location.href= "http://stackoverflow.com";
+    }    
+    let registerApi = 'https://f8team.dev/api/auth/chat-me';
+    let options = {
+        method: "GET",
+        headers: {
+            'content-type': 'application/json',
+            'accept': 'application/json',
+            'Authorization': `Bearer ${loc}`
+        },
+    
+    }          
+    fetch(registerApi, options)
+        .then(res => {
+            console.log(res.status);
+            if(res.status >= 200 && res.status <300){
+                console.log("thanh cong");
+                return res.json();
+            }
+            if(res.status >= 400 && res.status <=500){
+                console.log("loi roi");
+                throw new Error("loi 1 cai gi do")
+            }
+        })
+        .then(result => {
+            //luu token
+            //chuyen trang home
+            console.log(result.data.name);
+            hello.innerHTML = result.data.name
+        })         
+
+
+    logout.onclick = function(e){
+        localStorage.removeItem('token');
+        let registerApi1 = 'https://f8team.dev/api/auth/chat-logout';
+        let options1 = {
+            method: "POST",
+            headers: {
+                'content-type': 'application/json',
+                'accept': 'application/json',
+                'Authorization': `Bearer ${loc}`
+            },
+        }      
+        location.replace("./login.html");   
+    fetch(registerApi1, options1)
+        .then(res => {
+            console.log(res.status);
+            if(res.status >= 200 && res.status <300){
+                console.log("thanh cong");
+                return res.json();
+                location.replace("./login.html");
+            }
+            if(res.status >= 400 && res.status <=500){
+                console.log("loi roi");
+                throw new Error("loi 1 cai gi do")
+                location.replace("./login.html");   
+            }
+        })
+        .then(result => {
+            //luu token
+            //chuyen trang home
+            console.log(result.data.name);
+            location.replace("./login.html");
+        })         
+        .catch(error => {
+            console.log(error);
+        }) 
+
+    }
+
+
+
+
+
+
+    
+
+</script>
