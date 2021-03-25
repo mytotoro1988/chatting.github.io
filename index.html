@@ -4,59 +4,53 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>dang ky</title>
+    <title>Đăng nhập</title>
+    <style>
+        .error {
+            color:red;
+            font-size:12px;
+        }
+    </style>
 </head>
 <body>
-    <h3>dang ky</h3>
-    <form>
+    <h3>Đăng nhập</h3>
+    <form action="POST">
+        <div class="error"></div>
         <div class="">
-            <label for="username">username</label>
-            <input type="text" id="username" placeholder="ten dang nhap">
-            <label class="error"></label>
-            
-        </div>
-        <div class="">
-            <label for="email"> email</label>
-            <input type="text" id="email" placeholder="vui long nhap email">
-            <label class="error"></label>
+            <label for="email">Email</label>
+            <input type="text" id="email" placeholder="vui lòng nhập email"/>
         </div>
      
         <div class="">
-            <label >mat khau</label>
-            <input type="text" id="current-password" placeholder="vui long nhap password    ">
-            <label class="error"></label>
+            <label for="password">Mật khẩu</label>
+            <input type="password" id="password" placeholder="vui lòng nhập mật khẩu">
         </div>
-        <button id=reg> dang ky </button>
-        <div>
+        <button id=log> Đăng nhập</button>
     </form>
-    <button id="chuyen"> chuyen </button>
-    
-        <a href="./login.html">dang nhap</a>
+    <div>
         <p>Bạn chưa có tài khoản? Bấm vào <a href="./resgiter.html"><b>đây</b></a> để đăng ký.</p>
-        <a href="./resgiter.html">logout</a>
     </div>
-
- 
 </body>
 </html>
 <script>
-    var password = document.querySelector("#current-password")
+
+
+    var loc = localStorage.getItem('token');
+    if(loc = null){
+        location.replace("./login.html");
+    }
+     password = document.querySelector("#password")
     username = document.querySelector("#username")
     email = document.querySelector("#email")
     reg = document.querySelector("#reg")
     var chuyen = document.querySelector("#chuyen")
-    errorList = document.querySelectorAll(".error")
+    errorTitle = document.querySelector(".error")
+    log = document.querySelector("#log")
 
 
-    chuyen.onclick = function(e){
-        console.log("hi")
-        e.preventDefault()
-            location.href= "http://stackoverflow.com";
-    }
-    reg.onclick = function(e){
+    log.onclick = function(e){
         e.preventDefault();
-        console.log("submit");
-        let registerApi = 'https://f8team.dev/api/auth/chat-register';
+        let registerApi = 'https://f8team.dev/api/auth/chat-login';
         let options = {
             method: "POST",
             headers: {
@@ -64,36 +58,29 @@
                 'accept': 'application/json',
             },
             body: JSON.stringify({
-                name: `${username.value}`,
                 email: `${email.value}`,
                 password: `${password.value}`,
             })
         }          
-
-   
-
         fetch(registerApi, options)
             .then(res => {
-                console.log(res.status);
-
                 if(res.status >= 200 && res.status <300){
-                    console.log("thanh cong");
                     return res.json();
                 }
                 if(res.status >= 400 && res.status <=500){
-                    console.log(errorList);
+                    errorTitle.innerHTML = "Email hoặc mật khẩu không đúng, vui lòng thử lại !"
                 }
             })
             .then(result => {
-                //luu token
-                console.log(result);
                 localStorage.setItem('token', `${result.meta.token}`);
+                //luu token
                 //chuyen trang home
-                console.log("dang ki thanh cong ! dang chuyen chuyen trang login");
-                console.log("dang ki thanh cong ! dang chuyen chuyen trang login");
-                location.replace("./login.html");
-            })     
-           
-    }
+                location.replace("./home.html");
+            })
+            .catch(res => {
+            })      
+        }
+   
 
+    
 </script>
