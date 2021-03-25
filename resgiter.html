@@ -4,58 +4,63 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>dang ky</title>
+    <title>Đăng ký</title>
+    <style>
+        .error{color:red;}
+    </style>
 </head>
 <body>
-    <h3>dang ky</h3>
+    <h3>Đăng ký</h3>
     <form>
+        <label class="error"></label>
         <div class="">
-            <label for="username">username</label>
-            <input type="text" id="username" placeholder="vui long dang nhap">
-            <label class="error"></label>
+            <label for="username">Tên đầy đủ</label>
+            <input type="text" id="username" placeholder="Tên của bạn">
             
         </div>
         <div class="">
             <label for="email"> email</label>
-            <input type="text" id="email" placeholder="vui long nhap email">
-            <label class="error"></label>
+            <input type="text" id="email" placeholder="vui lòng nhập email">
         </div>
      
         <div class="">
-            <label >mat khau</label>
-            <input type="text" id="current-password" placeholder="vui long nhap password    ">
-            <label class="error"></label>
+            <label >Mật khẩu</label>
+            <input type="text" id="current-password" placeholder="vui lòng nhập mật khẩu">
         </div>
-        <button id=reg> dang ky </button>
+        <button id=reg> Đăng ký </button>
         <div>
     </form>
-    <button id="chuyen"> chuyen </button>
-    
-        <a href="./login.html">dang nhap</a>
-        <a href="./resgiter.html">dang ky</a>
-        <logout href="./resgiter.html">logout</a>
+        <p>Bạn đã có tài khoản? Bấm vào <a href="./login.html"><b>đây</b></a> để đăng nhập.</p>
+        
     </div>
 
  
 </body>
 </html>
 <script>
+    var a = localStorage.getItem('token');
+    if(a){
+        location.href= "./home.html";
+    }
+
     var password = document.querySelector("#current-password")
     username = document.querySelector("#username")
     email = document.querySelector("#email")
     reg = document.querySelector("#reg")
     var chuyen = document.querySelector("#chuyen")
-    errorList = document.querySelectorAll(".error")
+    errorList = document.querySelector(".error")
+    errorInput = document.querySelectorAll("input")
+
+    //focus xoa hightline
+
 
 
     chuyen.onclick = function(e){
-        console.log("hi")
         e.preventDefault()
             location.href= "http://stackoverflow.com";
     }
     reg.onclick = function(e){
         e.preventDefault();
-        console.log("submit");
         let registerApi = 'https://f8team.dev/api/auth/chat-register';
         let options = {
             method: "POST",
@@ -69,29 +74,28 @@
                 password: `${password.value}`,
             })
         }          
-
-   
-
         fetch(registerApi, options)
             .then(res => {
-                console.log(res.status);
 
                 if(res.status >= 200 && res.status <300){
-                    console.log("thanh cong");
                     return res.json();
                 }
                 if(res.status >= 400 && res.status <=500){
-                    console.log(errorList);
+                    errorList.innerHTML = "email tồn tại, vui lòng nhập email khác !"
                 }
             })
             .then(result => {
+            
                 //luu token
-                console.log(result);
-                localStorage.setItem('token', `${result.meta.token}`);
+                if(result){
+                    localStorage.setItem('token', `${result.meta.token}`);
+                    location.replace("./login.html");
+                }
                 //chuyen trang home
-                console.log("dang ki thanh cong chuyen trang login");
-                location.replace("./login.html");
-            })     
+            })    
+            .catch((error) => {
+                console.error('Error:', error);
+            }); 
            
     }
 

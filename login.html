@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>dang nhap</title>
+    <title>Đăng nhập</title>
     <style>
         .error {
             color:red;
@@ -13,24 +13,22 @@
     </style>
 </head>
 <body>
-    <h3>dang nhap</h3>
+    <h3>Đăng nhập</h3>
     <form action="POST">
+        <div class="error"></div>
         <div class="">
-            <label for="email">email</label>
-            <input type="text" id="email" placeholder="vui long nhap email"/>
-            <label class="error"></label>
+            <label for="email">Email</label>
+            <input type="text" id="email" placeholder="vui lòng nhập email"/>
         </div>
      
         <div class="">
-            <label for="password">pass</label>
-            <input type="password" id="password" placeholder="password" placeholder="vui long nhap mat khau">
+            <label for="password">Mật khẩu</label>
+            <input type="password" id="password" placeholder="vui lòng nhập mật khẩu">
         </div>
-        <button id=log> dang nhap </button>
-        <button id=chuyen> chuyen trang thai </button>
+        <button id=log> Đăng nhập</button>
     </form>
     <div>
-        <a href="./login.html">dang nhap</a>
-        <a href="./resgiter.html">dang ky</a>
+        <p>Bạn chưa có tài khoản? Bấm vào <a href="./resgiter.html"><b>đây</b></a> để đăng ký.</p>
     </div>
 </body>
 </html>
@@ -39,7 +37,6 @@
 
     var loc = localStorage.getItem('token');
     if(loc = null){
-        console.log("run");
         location.replace("./login.html");
     }
      password = document.querySelector("#password")
@@ -47,16 +44,10 @@
     email = document.querySelector("#email")
     reg = document.querySelector("#reg")
     var chuyen = document.querySelector("#chuyen")
-    console.log(password.value);
+    errorTitle = document.querySelector(".error")
+    log = document.querySelector("#log")
 
-    chuyen.onclick = function(e){
-        console.log("hi")
-        e.preventDefault()
-            location.href= "http://stackoverflow.com";
-        }
-    function showError(){
-        
-    }
+
     log.onclick = function(e){
         e.preventDefault();
         let registerApi = 'https://f8team.dev/api/auth/chat-login';
@@ -74,11 +65,10 @@
         fetch(registerApi, options)
             .then(res => {
                 if(res.status >= 200 && res.status <300){
-                    console.log("thanh cong");
                     return res.json();
                 }
                 if(res.status >= 400 && res.status <=500){
-                    console.log(res.status);
+                    errorTitle.innerHTML = "Email hoặc mật khẩu không đúng, vui lòng thử lại !"
                 }
             })
             .then(result => {
